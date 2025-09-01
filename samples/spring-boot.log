@@ -1,0 +1,75 @@
+2025-08-28T09:59:58.412+02:00  INFO 12084 --- [main] c.e.demo.DemoApplication       : Starting DemoApplication using Java 21 on macOS with PID 12084
+2025-08-28T10:00:00.237+02:00  INFO 12084 --- [main] o.s.b.w.embedded.tomcat.Tomcat : Tomcat initialized with port(s): 8080 (http)
+2025-08-28T10:00:00.412+02:00  INFO 12084 --- [main] o.s.b.w.embedded.tomcat.Tomcat : Starting service [Tomcat]
+2025-08-28T10:00:00.416+02:00  INFO 12084 --- [main] o.a.c.core.StandardService     : Starting Servlet engine: [Apache Tomcat/10.1.0]
+2025-08-28T10:00:01.004+02:00  INFO 12084 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor : Initializing ExecutorService 'applicationTaskExecutor'
+2025-08-28T10:00:02.145+02:00  INFO 12084 --- [main] c.e.demo.DemoApplication       : Started DemoApplication in 2.631 seconds (JVM running for 3.021)
+
+2025-08-28T10:01:12.003+02:00  INFO 12084 --- [nio-8080-exec-1] c.e.demo.web.HealthController  : GET /actuator/health -> 200 OK
+2025-08-28T10:01:12.127+02:00 DEBUG 12084 --- [nio-8080-exec-1] c.e.demo.web.HealthController  : headers={Accept=*/*, User-Agent=curl/8.7.1}
+
+2025-08-28T10:02:45.519+02:00  INFO 12084 --- [nio-8080-exec-2] c.e.demo.user.UserController   : GET /api/users/42 -> 200 OK in 18ms
+2025-08-28T10:02:45.541+02:00 DEBUG 12084 --- [nio-8080-exec-2] c.e.demo.user.UserService      : findById(42) hit cache=true
+
+2025-08-28T10:03:02.008+02:00  WARN 12084 --- [nio-8080-exec-3] c.e.demo.order.OrderController : POST /api/orders -> 400 BAD_REQUEST (validation failed)
+2025-08-28T10:03:02.010+02:00  WARN 12084 --- [nio-8080-exec-3] c.e.demo.order.OrderService    : Validation error: item quantity must be > 0
+
+2025-08-28T10:04:11.772+02:00  INFO 12084 --- [scheduling-1] c.e.demo.jobs.ReportJob        : Generated daily report in 324ms
+2025-08-28T10:04:11.775+02:00 DEBUG 12084 --- [scheduling-1] c.e.demo.jobs.ReportJob        : rows=152, errors=0
+
+2025-08-28T10:05:29.333+02:00 ERROR 12084 --- [nio-8080-exec-4] c.e.demo.pay.PaymentService    : Payment gateway timeout after 3000ms (requestId=abc-123)
+
+2025-08-28T10:05:29.336+02:00 ERROR 12084 --- [nio-8080-exec-4] c.e.demo.web.ErrorHandler      : Uncaught exception while handling /api/payments
+java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:xxx)
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:xxx)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:xxx)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:xxx)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:xxx)
+	at c.e.demo.pay.GatewayClient.post(GatewayClient.java:87)
+	at c.e.demo.pay.PaymentService.charge(PaymentService.java:112)
+	at c.e.demo.web.PaymentController.create(PaymentController.java:58)
+	... 18 common frames omitted
+
+2025-08-28T10:06:07.004+02:00  INFO 12084 --- [kafka-listener-0] c.e.demo.stream.UserEventsListener : Consumed UserRegistered(key=42)
+2025-08-28T10:06:07.055+02:00 DEBUG 12084 --- [kafka-listener-0] c.e.demo.stream.UserEventsListener : offset=12872, partition=3, lag=0
+
+2025-08-28T10:07:20.441+02:00  WARN 12084 --- [nio-8080-exec-5] c.e.demo.security.AuthFilter   : Missing Authorization header -> 401
+2025-08-28T10:07:20.442+02:00  INFO 12084 --- [nio-8080-exec-5] c.e.demo.web.AccessLog         : 401 GET /api/secure/profile ip=192.168.1.10 ua=Mozilla/5.0
+
+2025-08-28T10:08:55.011+02:00  INFO 12084 --- [nio-8080-exec-6] c.e.demo.user.UserController   : POST /api/users -> 201 CREATED id=77
+2025-08-28T10:08:55.043+02:00 DEBUG 12084 --- [nio-8080-exec-6] c.e.demo.user.UserService      : saved entity id=77 in 22ms
+
+2025-08-28T10:10:14.290+02:00 ERROR 12084 --- [pool-1-thread-3] c.e.demo.repo.UserRepository   : Database error while saving user id=77
+org.postgresql.util.PSQLException: FATAL: connection lost
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:xxx)
+	at c.e.demo.repo.UserRepository.save(UserRepository.java:142)
+	at c.e.demo.user.UserService.save(UserService.java:88)
+	... 12 common frames omitted
+
+2025-08-28T10:11:31.004+02:00  INFO 12084 --- [nio-8080-exec-7] c.e.demo.web.MetricsController : GET /actuator/metrics/http.server.requests -> 200 OK
+
+2025-08-28T10:12:00.000+01:00  INFO 12084 --- [nio-8080-exec-8] c.e.demo.web.TimeController    : GET /api/time -> 200 OK tz=+01:00
+2025-08-28T10:12:00.123+02:00 DEBUG 12084 --- [nio-8080-exec-8] c.e.demo.web.TimeController    : serverTime=2025-08-28T10:12:00.123+02:00
+
+2025-08-28T10:13:45.777+02:00  WARN 12084 --- [nio-8080-exec-9] c.e.demo.order.OrderService    : Upstream service latency high: 1890ms
+2025-08-28T10:13:45.779+02:00  INFO 12084 --- [nio-8080-exec-9] c.e.demo.web.PerfLog           : slow request GET /api/orders/summary took=1892ms
+
+2025-08-28T10:14:32.015+02:00 DEBUG 12084 --- [nio-8080-exec-10]c.e.demo.search.SearchService  : query='laptop bag' hits=12
+2025-08-28T10:14:32.019+02:00  INFO 12084 --- [nio-8080-exec-10]c.e.demo.web.SearchController  : GET /api/search?q=laptop+bag -> 200 OK
+
+2025-08-28T10:15:42.123+02:00  INFO 12084 --- [nio-8080-exec-1] c.e.demo.user.UserController   : DELETE /api/users/13 -> 204 NO_CONTENT
+2025-08-28T10:15:42.145+02:00  INFO 12084 --- [nio-8080-exec-1] c.e.demo.audit.AuditLogger     : user=admin action=DELETE_USER id=13 status=SUCCESS
+
+2025-08-28T10:16:03.002+02:00  WARN 12084 --- [nio-8080-exec-11]c.e.demo.web.RateLimitFilter    : Client 192.168.1.23 exceeded 60 req/min
+2025-08-28T10:16:03.003+02:00  INFO 12084 --- [nio-8080-exec-11]c.e.demo.web.AccessLog          : 429 GET /api/search ip=192.168.1.23 ua=curl/8.7.1
+
+2025-08-28T10:17:25.488+02:00  INFO 12084 --- [scheduling-1] c.e.demo.jobs.CleanupJob       : Removed 124 expired sessions
+2025-08-28T10:17:25.491+02:00 DEBUG 12084 --- [scheduling-1] c.e.demo.jobs.CleanupJob       : took=41ms
+
+2025-08-28T10:18:40.004+02:00 ERROR 12084 --- [nio-8080-exec-12]c.e.demo.img.ImageService      : Failed to process image id=901 reason=Unsupported format: .tiff
+2025-08-28T10:18:40.006+02:00  WARN 12084 --- [nio-8080-exec-12]c.e.demo.web.ImageController   : POST /api/images -> 415 UNSUPPORTED_MEDIA_TYPE
+
+2025-08-28T10:19:59.333+02:00  INFO 12084 --- [nio-8080-exec-13]c.e.demo.web.HealthController  : GET /actuator/health -> 200 OK
+
+2025-08-28T10:20:12.017+02:00  INFO 12084 --- [ShutdownHook ] c.e.demo.DemoApplication       : Shutting down, bye!
