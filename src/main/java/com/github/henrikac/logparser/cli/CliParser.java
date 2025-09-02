@@ -1,10 +1,14 @@
 package com.github.henrikac.logparser.cli;
 
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CliParser {
-    public static ArrayList<CommandLineOption> parse(String[] args) throws InvalidOptionException, InvalidOptionValueException {
+    public static List<CommandLineOption> parse(String[] args) throws InvalidOptionException, InvalidOptionValueException {
         ArrayList<CommandLineOption> options = new ArrayList<>();
         int i = 0;
 
