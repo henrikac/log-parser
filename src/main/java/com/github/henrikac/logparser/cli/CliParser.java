@@ -1,5 +1,7 @@
 package com.github.henrikac.logparser.cli;
 
+import com.github.henrikac.logparser.core.LogLevel;
+
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.LinkOption;
@@ -13,6 +15,7 @@ public class CliParser {
         int i = 0;
 
         while (i < args.length - 1) {
+            String value;
             String arg = args[i];
 
             if (!arg.startsWith("--")) {
@@ -26,7 +29,7 @@ public class CliParser {
                     }
 
                     String original = args[i + 1];
-                    String value = original;
+                    value = original;
 
                     if (value.isBlank()) {
                         throw new InvalidOptionValueException("Option --file requires a value (missing path)");
@@ -55,11 +58,33 @@ public class CliParser {
                         throw new InvalidOptionValueException("Invalid path for --file: " + original + " (not readable)");
                     }
 
-                    i += 2;
+                    i += 1;
 
                     options.add(new CommandLineOption(arg, path.toString()));
                     break;
                 case "--level":
+                    if (i == args.length - 1) {
+                        throw new InvalidOptionValueException("Option --level requires a value (missing level)");
+                    }
+
+                    value = args[i + 1];
+
+                    if (value.isBlank()) {
+                        throw new InvalidOptionValueException("Option --level requires a value (missing level)");
+                    } else if (value.startsWith("--")) {
+                        throw new InvalidOptionValueException("Option --level requires a value, got flag: " + value);
+                    }
+
+                    try {
+                        LogLevel level = LogLevel.fromString(value);
+
+                        i += 1;
+
+                        options.add(new CommandLineOption(arg, level.name()));
+                    } catch (IllegalArgumentException e) {
+                        throw new InvalidOptionValueException("Invalid level for --level: " + value);
+                    }
+
                     break;
                 case "--format":
                     break;
