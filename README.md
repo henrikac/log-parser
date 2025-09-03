@@ -21,42 +21,38 @@ not as a production-ready tool.
 - Not intended for real-world usage
 
 ## Installation
+
 ### Build
-This project was developed with IntelliJ IDEA, but you can also build it from the command line:
+This project uses [Maven](https://maven.apache.org/). From the project root, run:
 
 ```
-javac -d out $(find src -name "*.java")
+mvn clean package
+```
+
+This will compile the code and package it as a JAR under `target/`, for example:
+
+```
+target/log-parser-0.1.0-SNAPSHOT.jar
 ```
 
 ### Run
-Run the program by pointing to the main class:
+Run the program with `java -jar`:
 
 ```
-java -cp out com.github.henrikac.logparser.App --file samples/spring-boot.log --level ERROR
+java -jar target/log-parser-0.1.0-SNAPSHOT.jar \
+  --file samples/spring-boot.log \
+  --level ERROR
 ```
 
 #### Multiple files and levels
 You can provide multiple log files and levels:
 
 ```
-java -cp out com.github.henrikac.logparser.App \
+java -jar target/log-parser-0.1.0-SNAPSHOT.jar \
   --file samples/spring-boot.log \
   --file samples/other.log \
   --level ERROR \
   --level WARN
-```
-
-### Optional: Create a JAR
-Package as a JAR if you prefer:
-
-```
-jar --create --file logparser.jar -C out .
-```
-
-Run it like this:
-
-```
-java -jar logparser.jar --file samples/spring-boot.log --level INFO
 ```
 
 ## Possible Future Improvements
