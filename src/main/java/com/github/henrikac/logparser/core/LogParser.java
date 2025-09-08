@@ -13,24 +13,26 @@ public class LogParser {
             throw new EmptyLogFileException("Log file is empty");
         }
 
-        String regex = "^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?(?:Z|[+\\-]\\d{2}:?\\d{2})?\\s+(TRACE|DEBUG|INFO|WARN|ERROR|CRITICAL)\\s+.*$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher;
-
         ArrayList<LogRecord> records = new ArrayList<>();
 
         for (String line : lines) {
-            matcher = pattern.matcher(line);
-
-            if (!matcher.matches()) {
-                continue;
-            }
-
-            LogLevel level = LogLevel.fromString(matcher.group(1).trim());
-
-            records.add(new LogRecord(level, line));
+            records.add(this.parseLine(line));
         }
 
         return records;
+    }
+
+    public LogRecord parseLine(String line) {
+        String regex = "^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?(?:Z|[+\\-]\\d{2}:?\\d{2})?\\s+(TRACE|DEBUG|INFO|WARN|ERROR|CRITICAL)\\s+.*$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(line);
+
+        if (!matcher.matches()) {
+            return null;
+        }
+
+        LogLevel level = LogLevel.fromString(matcher.group(1).trim());
+
+        return new LogRecord(level, line);
     }
 }
